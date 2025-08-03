@@ -1,50 +1,79 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int N = 1e5 + 5;
+const int N = 26;
 
-vector<int> adj[N];
-bool visited[N];
-int level[N];
-int parent[N];
+vector<int> g[N];
+bool vis[N];
+int lvl[N];
+int par[N];
 
 int main() {
   ios::sync_with_stdio(false);
-  cin.tie(nullptr);
+  cin.tie(0);
 
-  int n, m;
-  cin >> n >> m;
+  int m = 6;
 
-  for (int i = 0; i < m; i++) {
-    int u, v;
-    cin >> u >> v;
-    adj[u].push_back(v);
-    adj[v].push_back(u);
+  vector<pair<char, char>> edges = {
+    {'A','B'},
+    {'A','C'},
+    {'B','D'},
+    {'C','E'},
+    {'E','F'},
+    {'D','F'}
+  };
+
+  for (auto [a, b] : edges) {
+    int u = a - 'A';
+    int v = b - 'A';
+    g[u].push_back(v);
+    g[v].push_back(u);
   }
 
   queue<int> q;
-  q.push(1);
-  visited[1] = true;
-  level[1] = 0;
-  parent[1] = 0;
+  int src = 'A' - 'A';
+  q.push(src);
+
+  vis[src] = true;
+  lvl[src] = 0;
+  par[src] = -1;
+
+  cout << "Visited Flow:\n";
 
   while (!q.empty()) {
     int u = q.front();
     q.pop();
-    for (int v : adj[u]) {
-      if (!visited[v]) {
-        visited[v] = true;
-        level[v] = level[u] + 1;
-        parent[v] = u;
+
+    cout << char('A' + u) << " -> ";
+
+    for (int v : g[u]) {
+      if (!vis[v]) {
+        vis[v] = true;
+        lvl[v] = lvl[u] + 1;
+        par[v] = u;
         q.push(v);
       }
     }
   }
 
-  for (int i = 1; i <= n; i++) cout << level[i] << " ";
-  cout << "\n";
-  for (int i = 1; i <= n; i++) cout << parent[i] << " ";
-  cout << "\n";
+  cout << "END\n\n";
+
+  cout << "Level:\n";
+  for (int i = 0; i < N; i++) {
+    if (vis[i]) {
+      cout << char('A' + i) << ": " << lvl[i] << "\n";
+    }
+  }
+
+  cout << "\nParent:\n";
+  for (int i = 0; i < N; i++) {
+    if (vis[i]) {
+      cout << char('A' + i) << ": ";
+      if (par[i] == -1) cout << "None";
+      else cout << char('A' + par[i]);
+      cout << "\n";
+    }
+  }
 
   return 0;
 }
