@@ -1,28 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-map<int, vector<int>> adj;
-int target;
+map<char, vector<char>> adj;
+char target;
 
-bool dls(int node, int depth) {
+bool dls(char node, int depth) {
     if (node == target) return true;
     if (depth == 0) return false;
 
-    for (int child : adj[node]) {
+    for (char child : adj[node]) {
         if (dls(child, depth - 1))
             return true;
     }
     return false;
 }
 
-bool ids(int start, int maxDepth) {
+bool ids(char start, int maxDepth) {
     for (int depth = 1; depth <= maxDepth; depth++) {
         cout << "Depth " << depth << ": ";
         if (dls(start, depth)) {
             cout << "Found\n";
             return true;
-        }
-        else {
+        } else {
             cout << "Not found\n";
         }
     }
@@ -33,20 +32,20 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    // Build demo graph: A-F
+    // Build demo graph using characters directly
     adj.clear();
-    adj['A' - 'A'].push_back('B' - 'A');
-    adj['A' - 'A'].push_back('C' - 'A');
-    adj['B' - 'A'].push_back('D' - 'A');
-    adj['C' - 'A'].push_back('D' - 'A');
-    adj['C' - 'A'].push_back('E' - 'A');
-    adj['D' - 'A'].push_back('F' - 'A');
-    adj['E' - 'A'].push_back('F' - 'A');
+    adj['A'].push_back('B');
+    adj['A'].push_back('C');
+    adj['B'].push_back('D');
+    adj['C'].push_back('D');
+    adj['C'].push_back('E');
+    adj['D'].push_back('F');
+    adj['E'].push_back('F');
 
-    int start = 'A' - 'A';
-    target = 'F' - 'A';
+    char start = 'A';
+    target = 'F';
 
-    cout << "Start: A, Target: F, Max Depth: 3\n\n";
+    cout << "Start: " << start << ", Target: " << target << ", Max Depth: 3\n\n";
 
     bool res = ids(start, 3);
 
